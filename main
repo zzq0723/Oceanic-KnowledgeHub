@@ -1,0 +1,47 @@
+import os
+import sys
+import torch
+from run import main
+
+if __name__ == "__main__":
+    # 首先检查 CUDA
+    print("CUDA available:", torch.cuda.is_available())
+    print("CUDA device count:", torch.cuda.device_count())
+    if torch.cuda.is_available():
+        print("Current CUDA device:", torch.cuda.current_device())
+        print("GPU name:", torch.cuda.get_device_name(0))
+
+    # 设置命令行参数
+    sys.argv = [
+        "run.py",
+        "--dataset_name", "biaozhun",
+        "--vit_name", "vit",
+        "--bert_name", "bert",
+        "--num_epochs", "20",
+        "--batch_size", "2",  # 先用小batch_size测试
+        "--lr", "1e-5",
+        "--warmup_ratio", "0.06",
+        "--eval_begin_epoch", "1",
+        "--seed", "1234",
+        "--device", "cuda:0",  # 明确指定 GPU 设备
+        "--do_train",
+        "--use_dep",
+        "--use_box",
+        "--use_cap",
+        "--max_seq", "96",
+        "--save_path", "ckpt"
+    ]
+
+    # 设置 CUDA 环境变量
+    os.environ["CUDA_VISIBLE_DEVICES"] = "0"
+
+    # 运行主程序
+    try:
+        main()
+    except Exception as e:
+        print(f"Error occurred: {str(e)}")
+
+        # 打印 GPU 内存信息
+        if torch.cuda.is_available():
+            print("\nGPU Memory Summary:")
+            print(torch.cuda.memory_summary())
