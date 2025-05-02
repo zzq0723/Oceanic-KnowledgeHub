@@ -1,0 +1,30 @@
+from typing import Any, Optional, Tuple
+
+import torch
+import torch.utils.checkpoint
+from torch import nn
+
+from transformers.activations import ACT2FN
+from transformers.file_utils import (
+    ModelOutput,
+    add_start_docstrings,
+    add_start_docstrings_to_model_forward,
+    replace_return_docstrings,
+)
+from transformers.file_utils import ModelOutput
+from transformers.modeling_outputs import BaseModelOutput, BaseModelOutputWithPooling
+from transformers.modeling_utils import PreTrainedModel
+from transformers.utils import logging
+from transformers.models.clip import CLIPConfig, CLIPTextConfig, CLIPVisionConfig
+
+logger = logging.get_logger(__name__)
+
+_CHECKPOINT_FOR_DOC = "openai/clip-vit-base-patch32"
+
+CLIP_PRETRAINED_MODEL_ARCHIVE_LIST = [
+    "openai/clip-vit-base-patch32",
+    # See all CLIP models at https://huggingface.co/models?filter=clip
+]
+
+
+# Copied from transformers.models.bart.modeling_bart._expand_mask
